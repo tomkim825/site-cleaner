@@ -1,0 +1,55 @@
+<head>
+
+<!-- CSS HERE -->
+  <style>
+    body{ padding: 0 2%; color:#fff; background-color: #000; }
+    #jadeinput{ width: 100%; height:75% }
+    #copybtn{ opacity:0.2 }
+    .completed{ color: #fff; border: 1px solid #fff; display: inline-block; padding: 5px; margin: 0 5px; float: right}
+  </style>
+</head>
+
+<!-- HTML BODY HERE -->
+<body>
+  <h1> Site Cleaner</h1>
+  <textarea rows="30" cols="150" id="jadeInput"> </textarea>
+  <br>
+  <button id="processbtn" onclick="processJade()">Process and copy JADE</button> 
+  <div class="completed" id="left-nav">left-nav</div>
+  <div class="completed" id="global-c">global-c</div>
+  <div class="completed" id="global-a">global-a</div>
+  <div class="completed" id="flyout">flyout</div>
+  <div class="completed" id="legal">Legal</div>
+  <div class="completed" id="hp">HP</div>
+</body>
+
+<!-- JAVASCRIPT HERE -->
+<script>
+
+const checkJadeType = (replacementJade) => {
+  if(/_mixins_global_c_mobile.jade/g.test(replacementJade)) {document.getElementById("global-c").style.opacity = "0";}
+  else if(/barLeftNav/g.test(replacementJade)) {document.getElementById("left-nav").style.opacity = "0";}
+  else if(/#legal-/g.test(replacementJade)) {document.getElementById("legal").style.opacity = "0";}
+  if(/row.jab-hpb.jab-hpb-hp-container/g.test(replacementJade)) {document.getElementById("hp").style.opacity = "0";}
+  if(/.element.scroll-text-simple/g.test(replacementJade)) {document.getElementById("global-a").style.opacity = "0";}
+  if(/.sub-menu.is-active/g.test(replacementJade)) {document.getElementById("flyout").style.opacity = "0";}
+}
+
+const processJade = () => {   
+  var copyText = document.getElementById("jadeInput");
+  let replacementJade = copyText.value.replace(/a.jab-hpb-legal/g,"button.see-terms.jab-hpb-legal")
+    .replace(/a.close-reveal-modal/g,"button.modal-close.close-reveal-modal") 
+    .replace(/h2#modalTitle\(visuallyhidden\)/g,"") 
+    .replace(/br+\s+br/g,"\n \ p") 
+    // console.log(replacementJade)
+
+  checkJadeType(replacementJade) 
+
+  setTimeout(() => { 
+    document.getElementById("jadeInput").value = replacementJade; 
+    document.getElementById("jadeInput").select();
+    document.execCommand("copy");
+    document.getElementById("jadeInput").value = "";
+  }, 250);
+}
+</script>
